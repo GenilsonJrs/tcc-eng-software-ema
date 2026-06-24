@@ -1,0 +1,33 @@
+#linux backup files
+*~
+*.swp
+*.dvi
+*.ps
+*.backup
+*.aux
+
+#logs
+*.log
+
+#PDFs (saída da compilação)
+*.pdf
+# ...exceto imagens-fonte usadas nas figuras (capa, diagramas em PDF, etc.)
+!latex/figuras/*.pdf
+
+*.lof
+*.lot
+*.bbl
+*.blg
+*.brf
+*.toc
+*.idx
+*.ilg
+*.ind
+*.out
+
+#latexmk
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.run.xml
+*.bcf

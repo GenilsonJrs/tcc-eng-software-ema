@@ -1,0 +1,7 @@
+services:
+    latex:
+      build:
+        context: .
+      volumes:
+          - ./latex:/home/latex
+      command: bash -c 'make'
