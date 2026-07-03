@@ -1,11 +1,189 @@
 \chapter{Fundamentação Teórica}
 \label{cap:fundamentacao}
 
+Este capítulo reúne os fundamentos teóricos que sustentam o trabalho. Parte-se dos
+mecanismos neurofisiológicos que justificam a reabilitação de marcha e do papel da
+neuroplasticidade (Seção~\ref{sec:neuroplasticidade}); em seguida, delimitam-se os
+conceitos de realidade virtual, aumentada e mista (Seção~\ref{sec:rv-ra-rm}) e a sua
+aplicação à reabilitação (Seção~\ref{sec:rv-reabilitacao}). Por fim, abordam-se a
+eletroestimulação funcional e a robótica assistiva, a captura de movimento por sensores
+inerciais e os fundamentos de engenharia de software pertinentes ao diagnóstico e à
+proposta de arquitetura desenvolvidos nos capítulos seguintes.
+
 \section{Reabilitação de Marcha e Neuroplasticidade}
+\label{sec:neuroplasticidade}
+
+A marcha humana é uma tarefa motora complexa, resultante da coordenação fina entre o
+sistema nervoso central, o sistema musculoesquelético e a integração contínua de
+informações sensoriais. Lesões neurológicas como o acidente vascular cerebral (AVC) e a
+lesão medular interrompem, em graus variados, o controle dessa tarefa, comprometendo a
+locomoção e a autonomia do indivíduo. A reabilitação de marcha busca restaurar essa
+capacidade explorando um princípio fundamental do sistema nervoso: a sua plasticidade.
+
+Entende-se por \emph{neuroplasticidade} a capacidade do sistema nervoso de reorganizar a
+sua estrutura e a sua função em resposta à experiência. É esse fenômeno que fundamenta a
+recuperação motora após uma lesão neurológica e que sustenta a própria racionalidade das
+terapias de reabilitação. \citeonline{kleim2008} sistematizam esse conhecimento em um
+conjunto de princípios da plasticidade neural dependente de experiência, entre os quais
+se destacam a especificidade do treino (a natureza da experiência determina a natureza da
+adaptação neural), a importância da repetição e da intensidade (a plasticidade requer
+prática suficientemente repetida e intensa), a relevância da saliência do estímulo (a
+experiência precisa ser significativa para o indivíduo) e a influência do tempo e da
+idade sobre o processo. Esses princípios oferecem o alicerce neurocientífico que explica
+\emph{por que} um treino motor intensivo, repetitivo e engajador é capaz de promover
+recuperação funcional.
+
+No contexto específico da recuperação motora após o AVC, \citeonline{takeuchi2013}
+revisam os mecanismos de neuroplasticidade envolvidos e as estratégias terapêuticas que
+os exploram. Os autores destacam que a recuperação depende da reorganização de redes
+neurais preservadas e que abordagens baseadas em prática orientada à tarefa, com elevado
+número de repetições, tendem a produzir melhores desfechos. Ressaltam, contudo, um
+desafio prático recorrente: a dificuldade de sustentar, na terapia convencional, o volume
+e a intensidade de treino exigidos para desencadear a plasticidade, sobretudo quando o
+tratamento se estende por longos períodos e depende da motivação do paciente.
+
+É justamente nesse ponto que as tecnologias assistivas se articulam com os princípios da
+neuroplasticidade. Ao permitirem a prática repetida de tarefas motoras em ambientes
+controlados, ricos em realimentação sensorial e capazes de sustentar o engajamento, a
+realidade virtual, a robótica de reabilitação e a eletroestimulação funcional operam
+diretamente sobre os fatores que a literatura identifica como determinantes da adaptação
+neural --- repetição, intensidade e saliência \cite{rajashekar2024,macchitella2023}. A
+fundamentação dessas tecnologias, a começar pela realidade virtual, é o objeto das seções
+seguintes.
 
 \section{Realidade Virtual, Aumentada e Mista}
+\label{sec:rv-ra-rm}
+
+A realidade virtual (RV) pode ser definida como o uso de computação gráfica interativa
+para gerar ambientes tridimensionais nos quais o usuário percebe estar imerso e com os
+quais é capaz de interagir em tempo real. Dois conceitos são centrais para caracterizar
+essa experiência e são frequentemente tratados como sinônimos, embora descrevam dimensões
+distintas: a imersão e a presença. Segundo \citeonline{slater1997}, a \emph{imersão} é uma
+propriedade objetiva do sistema tecnológico --- o grau em que os dispositivos de exibição
+e de rastreamento são capazes de substituir os estímulos do mundo real por estímulos
+gerados por computador ---, ao passo que a \emph{presença} é o estado subjetivo
+resultante, a sensação psicológica de \emph{estar} no ambiente virtual. Um sistema de
+maior imersão tende a favorecer a presença, mas esta última depende também de fatores
+perceptivos e cognitivos do usuário. Essa distinção é relevante para a reabilitação:
+justifica, em termos técnicos, por que dispositivos de maior imersão --- como os capacetes
+de realidade virtual (\emph{head-mounted displays}, HMD) com rastreamento de movimento ---
+podem sustentar experiências terapêuticas mais engajadoras.
+
+Para situar a RV em relação a tecnologias correlatas, é clássica a taxonomia proposta por
+\citeonline{milgram1994}, que organiza as diferentes combinações entre elementos reais e
+virtuais ao longo de um \emph{continuum realidade--virtualidade}. Em um extremo situa-se o
+ambiente real, composto exclusivamente por objetos físicos; no extremo oposto, o ambiente
+virtual, inteiramente sintético. Entre eles estende-se a \emph{realidade mista} (RM),
+região na qual objetos reais e virtuais coexistem: mais próxima do real, a
+\emph{realidade aumentada} (RA), que sobrepõe elementos virtuais ao mundo físico; mais
+próxima do virtual, a \emph{virtualidade aumentada} (VA), na qual elementos reais são
+incorporados a um ambiente predominantemente sintético. A Figura~\ref{fig:continuum}
+representa esse continuum.
+
+\begin{figure}[htb]
+	\centering
+	\caption{Continuum realidade--virtualidade de Milgram e Kishino.}
+	\label{fig:continuum}
+	\vspace{6pt}
+	\begin{tikzpicture}[font=\small]
+		\draw[{Latex[length=3mm]}-{Latex[length=3mm]}, thick] (0,0) -- (13,0);
+		\foreach \x in {0,4.33,8.67,13}{\draw[thick] (\x,0.12) -- (\x,-0.12);}
+		\node[align=center, anchor=north] at (0,-0.25) {Ambiente\\real};
+		\node[align=center, anchor=north] at (4.33,-0.25) {Realidade\\aumentada\\(RA)};
+		\node[align=center, anchor=north] at (8.67,-0.25) {Virtualidade\\aumentada\\(VA)};
+		\node[align=center, anchor=north] at (13,-0.25) {Ambiente\\virtual};
+		\draw[decorate, decoration={brace, amplitude=6pt}] (0.15,0.55) -- (12.85,0.55)
+			node[midway, above=8pt]{Continuum realidade--virtualidade};
+		\draw[decorate, decoration={brace, mirror, amplitude=6pt}] (4.33,-1.75) -- (8.67,-1.75)
+			node[midway, below=8pt]{Realidade mista (RM)};
+	\end{tikzpicture}
+
+	\vspace{4pt}
+	{\footnotesize Fonte: elaborado pelo autor com base em \citeonline{milgram1994}.}
+\end{figure}
+
+Embora concebida antes da difusão dos dispositivos atuais, essa taxonomia permanece a
+referência conceitual dominante na área. Trabalhos recentes, entretanto, propõem
+revisitá-la à luz da evolução tecnológica. \citeonline{skarbez2021} argumentam que
+dimensões como a imersão, a coerência e o grau de conhecimento do sistema sobre o ambiente
+real não são plenamente capturadas por um único eixo, sugerindo uma caracterização
+multidimensional da realidade mista. Para os fins deste trabalho, o continuum de
+\citeonline{milgram1994} é suficiente para posicionar o sistema em estudo: um ambiente
+virtual imersivo, no extremo virtual do continuum, no qual o movimento real do paciente é
+capturado e reproduzido, aproximando a experiência da noção de virtualidade aumentada.
 
 \section{Realidade Virtual Aplicada à Reabilitação}
+\label{sec:rv-reabilitacao}
+
+A aplicação da realidade virtual à reabilitação motora fundamenta-se na possibilidade de
+oferecer, em ambiente seguro e controlado, prática intensiva e repetitiva de tarefas
+associada a realimentação sensorial enriquecida e a maior engajamento do paciente ---
+precisamente os fatores associados à neuroplasticidade discutidos na
+Seção~\ref{sec:neuroplasticidade}. A magnitude desse benefício, contudo, deve ser
+avaliada com rigor. A revisão sistemática Cochrane conduzida por \citeonline{laver2017},
+que reúne o mais alto nível de evidência sobre o tema, conclui que a realidade virtual não
+é superior à terapia convencional quando empregada isoladamente, mas mostra-se benéfica
+como \emph{adjuvante} a ela, com efeitos mais consistentes quando a intervenção envolve
+maior dose de treino e programas personalizados. Essa conclusão é importante para
+delimitar expectativas: a RV é um recurso potencializador da terapia, e não um substituto
+dela.
+
+Um aspecto determinante para a eficácia dessas intervenções é a forma como o sistema
+apresenta ao usuário o seu próprio movimento --- a \emph{visualização do movimento}. A
+revisão sistemática de \citeonline{ferreiradossantos2016}, dedicada à reabilitação do
+membro inferior em realidade virtual, evidencia que essa representação assume formas
+diversas, desde a reprodução do movimento em um avatar até estratégias baseadas em
+realidade aumentada ou em representações abstratas. A Figura~\ref{fig:visualizacao}
+sintetiza as principais formas de visualização do movimento identificadas na literatura.
+
+\begin{figure}[htb]
+	\centering
+	\caption{Formas de visualização do movimento em realidade virtual.}
+	\label{fig:visualizacao}
+	\vspace{6pt}
+	\begin{tikzpicture}[
+		font=\small,
+		box/.style={draw, rounded corners, align=center, inner sep=5pt, minimum height=1cm},
+		raiz/.style={draw, rounded corners, align=center, inner sep=6pt, fill=black!8, minimum height=1cm},
+		]
+		\node[raiz] (r) {Visualização do movimento\\em realidade virtual};
+		\node[box, below=1.2cm of r, xshift=-5cm] (a) {Avatar\\(1\textsuperscript{a}/3\textsuperscript{a} pessoa)};
+		\node[box, below=1.2cm of r, xshift=-1.7cm] (b) {Espelho\\virtual};
+		\node[box, below=1.2cm of r, xshift=1.7cm] (c) {Realidade\\aumentada};
+		\node[box, below=1.2cm of r, xshift=5cm] (d) {Representação\\abstrata/simbólica};
+		\foreach \n in {a,b,c,d}{\draw[-{Latex[length=2mm]}] (r.south) -- (\n.north);}
+	\end{tikzpicture}
+
+	\vspace{4pt}
+	{\footnotesize Fonte: elaborado pelo autor com base em \citeonline{ferreiradossantos2016}.}
+\end{figure}
+
+A escolha da estratégia de visualização não é neutra: ela influencia a percepção do
+movimento, a sensação de agência e, em última análise, o engajamento e a transferência do
+aprendizado para tarefas funcionais \cite{ferreiradossantos2016,macchitella2023}. O
+sistema de realidade virtual do Projeto EMA, analisado no Capítulo~\ref{cap:diagnostico},
+adota a estratégia baseada em \emph{avatar}, reproduzindo em tempo real o movimento dos
+membros inferiores capturado por sensores inerciais.
+
+No que diz respeito especificamente à marcha e ao equilíbrio, a evidência clínica reforça
+o potencial da abordagem quando associada a outros recursos. O ensaio clínico randomizado
+multicêntrico de \citeonline{mirelman2016}, que combinou treino em esteira a um componente
+de realidade virtual, demonstrou redução significativa do risco de quedas em idosos quando
+comparado ao treino em esteira isolado, evidenciando o valor de integrar a RV a
+dispositivos de treino locomotor --- arranjo diretamente relacionado ao sistema proposto
+neste trabalho. Ainda assim, a maturidade da evidência varia conforme o desfecho. A
+revisão sistemática com metanálise de \citeonline{lee2024} indica que o treino em
+realidade virtual imersiva melhora medidas de equilíbrio em idosos, mas que os efeitos
+sobre parâmetros de marcha permanecem inconsistentes, apontando uma lacuna que motiva a
+continuidade das pesquisas na área.
+
+Por fim, cumpre registrar o alcance terapêutico dessa classe de tecnologias em cenários de
+maior comprometimento. \citeonline{donati2016} relataram que um protocolo de longo prazo
+associando treinamento imersivo em realidade virtual, realimentação tátil e exoesqueletos
+controlados por interface cérebro-máquina foi capaz de induzir recuperação neurológica
+parcial em pacientes com lesão medular crônica --- resultado que ilustra o potencial da
+integração entre realidade virtual, robótica e sinais fisiológicos, horizonte no qual se
+insere o ecossistema do Projeto EMA.
 
 \section{Eletroestimulação Funcional e Robótica de Reabilitação}
 
