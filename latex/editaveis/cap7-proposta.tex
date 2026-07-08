@@ -1,0 +1,157 @@
+\chapter{Recomendações e Caminho de Reestruturação}
+\label{cap:proposta}
+
+A partir do diagnóstico consolidado no Capítulo~\ref{cap:diagnostico}, este capítulo reúne as
+recomendações de Engenharia de Software e esboça um caminho de reestruturação para os
+sistemas do Projeto EMA. A lógica que organiza as recomendações é a de atacar primeiro as
+limitações mais básicas e de maior alcance --- aquelas que, com esforço reduzido, mais
+aproximam o laboratório do objetivo de que um novo integrante consiga reproduzir e evoluir os
+sistemas --- para só então avançar sobre as intervenções estruturais mais profundas. Embora
+vários exemplos remetam ao sistema de ciclismo com FES, por ser a frente ativa, os
+princípios aplicam-se igualmente ao sistema de realidade virtual.
+
+\section{Padronização do Versionamento e dos Repositórios}
+\label{sec:prop-git}
+
+O primeiro eixo de recomendações trata da governança do código-fonte, cujo estado atual foi
+diagnosticado na Seção~\ref{sec:diag-git}. Propõem-se as seguintes medidas:
+
+\begin{itemize}
+	\item \textbf{Convenção de nomenclatura e consolidação:} padronizar os repositórios sob
+	      uma estrutura clara de pacotes ROS~2 e identificar, para cada sistema, o
+	      \emph{repositório canônico} --- no caso do ciclismo, o \texttt{ema\_fes\_ros2} ---,
+	      eliminando duplicações e fragmentações de código.
+	\item \textbf{Ciclo de vida do repositório:} arquivar explicitamente código obsoleto e
+	      testes isolados de bancada, migrando para a árvore principal de desenvolvimento
+	      apenas os módulos funcionais já validados.
+	\item \textbf{Gerenciamento de escopo:} utilizar ativamente os recursos do GitHub ---
+	      \emph{Issues} para o rastreamento de defeitos (por exemplo, falhas de comunicação
+	      serial), \emph{Releases} para o versionamento de \emph{builds} estáveis do firmware
+	      e a divisão em equipes com proteção das ramificações principais. Recomenda-se, ainda,
+	      uma hierarquia de aprovação --- com a participação dos professores --- para que
+	      alterações sejam promovidas à ramificação principal.
+	\item \textbf{Template mínimo de repositório:} exigir uma estrutura de entrada
+	      padronizada, contendo um arquivo \texttt{README.md} técnico, a atribuição de uma
+	      licença de software e um arquivo \texttt{.gitignore} configurado para ignorar os
+	      artefatos gerados pela compilação do ROS~2 (as pastas \texttt{build/},
+	      \texttt{install/} e \texttt{log/}).
+	\item \textbf{Redundância e preservação:} adotar cópias de segurança em plataformas
+	      complementares ao repositório principal, gerando redundância que reduza a dependência
+	      de um único provedor e proteja o acervo do projeto contra eventuais perdas.
+\end{itemize}
+
+Um ponto merece detalhamento por incidir diretamente sobre a qualidade do código ao longo do
+tempo: a \emph{organização dos commits na ramificação principal segundo práticas de
+desenvolvimento de software livre}. Em vez de escrever diretamente na ramificação principal,
+propõe-se que todo novo trabalho ocorra em uma ramificação própria e só retorne à principal
+após verificação, validação e resolução de conflitos, por meio de uma requisição de
+incorporação (\emph{pull request}). Esse fluxo, ilustrado na Figura~\ref{fig:gitflow}, reduz
+a quantidade de defeitos reinseridos e o retrabalho de refatoração a cada iteração.
+
+\begin{figure}[H]
+	\centering
+	\caption{Fluxo de versionamento proposto para a ramificação principal.}
+	\label{fig:gitflow}
+	\vspace{6pt}
+	\begin{tikzpicture}[
+		font=\small,
+		cx/.style={draw, rounded corners, align=center, inner sep=4pt, minimum height=0.9cm, minimum width=2.3cm},
+		rel/.style={draw, rounded corners, align=center, inner sep=4pt, minimum height=0.9cm, minimum width=2.3cm, fill=black!8},
+		]
+		\node[cx] (main) at (0,0) {\emph{main}};
+		\node[cx] (commits) at (5,0) {novos commits\\na \emph{main}};
+		\node[rel] (release) at (10,0) {nova \emph{release}};
+		\node[cx] (feat) at (2.5,-2.4) {nova \emph{branch}};
+		\node[cx] (feat2) at (6.5,-2.4) {\emph{branch} validada};
+		\draw[-{Latex[length=2mm]}] (main) -- (commits) node[midway, above, font=\scriptsize]{evolução natural};
+		\draw[-{Latex[length=2mm]}] (commits) -- (release) node[midway, above, font=\scriptsize]{aceita \emph{PRs}};
+		\draw[-{Latex[length=2mm]}] (main.south) |- (feat.west) node[pos=0.75, below, font=\scriptsize]{nova \emph{branch}};
+		\draw[-{Latex[length=2mm]}] (feat) -- (feat2);
+		\draw[-{Latex[length=2mm]}] (commits.south) to[bend right=15] node[right, font=\scriptsize]{\emph{pull} da \emph{main}} (feat2.north);
+		\draw[-{Latex[length=2mm]}] (feat2.east) to[bend right=20] node[right, font=\scriptsize]{\emph{PR} para a \emph{main}} (commits.east);
+	\end{tikzpicture}
+
+	\vspace{4pt}
+	{\footnotesize Fonte: elaborado pelos autores.}
+\end{figure}
+
+\section{Documentação Mínima e Onboarding}
+\label{sec:prop-doc}
+
+O segundo eixo define um conjunto mínimo de documentação por sistema, tratado como código
+(\emph{docs-as-code}) e versionado junto ao repositório, orientado pelo arcabouço Diátaxis
+(Seção~\ref{sec:documentacao}):
+
+\begin{itemize}
+	\item \textbf{Estrutura baseada em Diátaxis:} elaborar arquivos em Markdown com uma visão
+	      geral do ecossistema, os requisitos de infraestrutura e um passo a passo
+	      \emph{reproduzível} para a inicialização do sistema como um todo.
+	\item \textbf{Guia de \emph{onboarding} e \emph{setup}:} fornecer instruções claras para a
+	      preparação do ambiente (por exemplo, Ubuntu Server 22.04 LTS em uma Raspberry Pi), a
+	      inclusão do usuário no grupo \texttt{dialout} para acesso às portas seriais e a
+	      instalação das dependências do ROS~2.
+	\item \textbf{Registro de Decisões de Arquitetura (ADR):} documentar formalmente as
+	      escolhas críticas de projeto --- como a adoção do DDS para a descentralização dos
+	      nós e a opção pela persistência local de configurações em vez de um banco de dados
+	      tradicional ---, preservando o contexto e as consequências de cada decisão.
+\end{itemize}
+
+\section{Diagramação Padronizada da Arquitetura}
+\label{sec:prop-diagramas}
+
+O terceiro eixo trata da produção e da manutenção de um conjunto de diagramas coerentes,
+corrigindo as lacunas de modelagem identificadas:
+
+\begin{itemize}
+	\item \textbf{Grafo de nós e tópicos do ROS~2:} representar com clareza o fluxo de
+	      publicação/assinatura entre os nós de controle e de aquisição de dados.
+	\item \textbf{Mapeamento de hardware e infraestrutura:} diagramar explicitamente o ciclo
+	      de hardware, incluindo as regras de \emph{kernel} do Linux (UDEV) que criam
+	      vínculos simbólicos persistentes para as portas seriais (por exemplo,
+	      \texttt{/dev/ttyUSB0} e \texttt{/dev/ttyACM0}), evitando ambiguidades na
+	      identificação dos dispositivos.
+	\item \textbf{Representação completa da HMI:} criar e diagramar os fluxos de hardware da
+	      interface humano-máquina --- corrigindo a omissão identificada no
+	      Capítulo~\ref{cap:caso-trike} ---, de modo a explicitar os pontos de conexão e a
+	      facilitar a reimplementação e a evolução do conjunto hardware/software.
+\end{itemize}
+
+\section{Modularização e Desacoplamento}
+\label{sec:prop-modularizacao}
+
+O quarto eixo reúne diretrizes para isolar o processamento de baixo nível das camadas de
+interação com o operador, atacando o acoplamento diagnosticado na Seção~\ref{sec:diag-arq}:
+
+\begin{itemize}
+	\item \textbf{Flexibilização da inicialização:} estruturar o pacote lógico de modo a
+	      permitir que nós críticos sejam executados e testados de forma unitária (por
+	      exemplo, \texttt{ros2 run ema\_fes\_cycling imu\_node}), superando a atual operação
+	      de ``tudo ou nada''.
+	\item \textbf{Isolamento de código e testes de bancada:} implementar, no script
+	      gerenciador do operador (\texttt{menu.sh} / \texttt{menu.py}), rotinas que permitam
+	      a execução independente de \emph{scripts} puramente em Python (\texttt{python3 -I}),
+	      temporariamente desacoplados do \emph{middleware}, para tarefas como a calibração de
+	      sensores.
+	\item \textbf{Camada de comunicação padronizada:} adotar um contrato de dados estrito no
+	      pacote de interfaces (\texttt{ema\_custom\_interfaces}, com mensagens \texttt{.msg} e
+	      serviços \texttt{.srv}), blindando os nós de controle contra alterações nos
+	      firmwares dos microcontroladores (ESP-IDF / Arduino).
+\end{itemize}
+
+\section{Caminho para a Integração (Trabalho Futuro)}
+\label{sec:prop-integracao}
+
+O quinto eixo esboça o caminho que prepara as etapas de expansão subsequentes, objeto do
+trabalho de conclusão de curso seguinte:
+
+\begin{itemize}
+	\item \textbf{Convergência de subsistemas:} planejar a fusão modular entre a plataforma de
+	      ciclismo com FES e os módulos de realidade virtual, unindo as duas frentes deste
+	      trabalho em um único ecossistema de reabilitação.
+	\item \textbf{Arquitetura \emph{plug-and-play}:} reestruturar o barramento de tópicos do
+	      ROS~2 para suportar a adição de novas modalidades de estímulo ou de novos sensores
+	      cinemáticos de forma transparente.
+	\item \textbf{Objetivo subsequente:} consolidar essa infraestrutura de software ---
+	      padronizada, distribuída e resiliente a falhas --- como a base estável e homologada
+	      para o desenvolvimento posterior.
+\end{itemize}

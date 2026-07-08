@@ -1,0 +1,47 @@
+\chapter{Considerações Finais}
+\label{cap:consideracoes}
+
+Este trabalho partiu de uma constatação simples e, ao mesmo tempo, incômoda: os sistemas do
+Projeto EMA, embora tenham cumprido os seus objetivos de pesquisa, não podem hoje ser
+reproduzidos por um novo integrante sem esforço considerável. A pergunta que orientou a
+investigação --- de que forma o instrumental da Engenharia de Software pode ser aplicado ao
+diagnóstico, à documentação e à reestruturação desses sistemas --- foi respondida por meio de
+dois estudos de caso complementares, o sistema de realidade virtual e o sistema de ciclismo
+com eletroestimulação funcional, examinados sob uma postura de consultoria.
+
+\section{Contribuições}
+\label{sec:contribuicoes}
+
+As principais contribuições deste trabalho são de natureza diagnóstica e metodológica.
+Documentou-se e diagramou-se a arquitetura atual de dois sistemas até então pouco descritos,
+reconstruindo-a por análise de código e engenharia reversa. Mapeou-se, de forma sistemática,
+a lacuna entre o que está \emph{registrado} e o que está de fato \emph{montado} --- desde a
+documentação perdida na migração de ROS~1 para ROS~2, no caso do ciclismo, até a lógica
+embarcada em \emph{Blueprints} e a coexistência de mecanismos de comunicação, no caso da
+realidade virtual. A partir desse diagnóstico, consolidaram-se recomendações de Engenharia de
+Software organizadas por prioridade --- versionamento, documentação, diagramação,
+modularização e caminho de integração ---, que constituem um roteiro acionável para as etapas
+seguintes. O conjunto entrega ao laboratório um retrato fiel do seu ponto de partida e um
+plano para evoluir a partir dele.
+
+\section{Limitações do Trabalho}
+\label{sec:limitacoes-trabalho}
+
+Reconhecem-se as limitações desta etapa. Consoante o seu caráter preparatório, o escopo foi o
+de diagnóstico, documentação e proposta --- não o da implementação e da validação
+experimental das soluções, reservadas à etapa subsequente. Ademais, o prazo de execução não
+permitiu a reprodução integral de sistemas cuja documentação é ausente ou incompleta; essa
+própria impossibilidade, contudo, não é uma omissão, mas um dos resultados diagnósticos do
+trabalho, e reforça a pertinência das recomendações apresentadas.
+
+\section{Trabalhos Futuros}
+\label{sec:trabalhos-futuros}
+
+Como continuidade natural, aponta-se a implementação das recomendações do
+Capítulo~\ref{cap:proposta}: a padronização dos repositórios e da documentação, a
+reativação efetiva do sistema de realidade virtual, a reestruturação e a modularização do
+sistema de ciclismo com FES e, ao final, a convergência das duas frentes em um ecossistema de
+reabilitação integrado e \emph{plug-and-play}. Consolidada essa base de software ---
+padronizada, documentada e resiliente ---, o laboratório estará apto a retomar, com
+segurança e continuidade, a evolução de tecnologias cujo propósito último é ampliar a
+autonomia e a qualidade de vida de pessoas em reabilitação.
