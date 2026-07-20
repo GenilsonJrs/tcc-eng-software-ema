@@ -13,6 +13,8 @@
 *.pdf
 # ...exceto imagens-fonte usadas nas figuras (capa, diagramas em PDF, etc.)
 !latex/figuras/*.pdf
+# ...e o PDF final do trabalho, disponibilizado para leitura no repositório
+!docs/*.pdf
 
 *.lof
 *.lot
