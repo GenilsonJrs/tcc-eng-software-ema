@@ -18,13 +18,13 @@ Universidade de Brasília (UnB). Concluído e defendido em **julho de 2026**.
     <td width="40%" align="center" valign="top">
       <a href="docs/TCC1.pdf"><img src="docs/capa-tcc.png" alt="Capa da monografia" width="250"></a>
       <br><br>
-      <strong><a href="docs/TCC1.pdf">➜ Monografia completa</a></strong>
+      <strong><a href="docs/TCC1.pdf">Monografia completa</a></strong>
       <br><sub>PDF · 54 páginas</sub>
     </td>
     <td width="60%" align="center" valign="top">
       <a href="docs/apresentacao.pdf"><img src="docs/capa-apresentacao.png" alt="Capa dos slides da defesa" width="430"></a>
       <br><br>
-      <strong><a href="docs/apresentacao.pdf">➜ Slides da defesa</a></strong>
+      <strong><a href="docs/apresentacao.pdf">Slides da defesa</a></strong>
       <br><sub>PDF · 13 slides</sub>
     </td>
   </tr>
